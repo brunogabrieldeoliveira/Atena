@@ -16,27 +16,58 @@ from langchain_community.vectorstores import FAISS
 # carregar variaveis de ambiente do aruqivo .env
 _= load_dotenv()
 
-# carrego modelo de linguagem
-llm= ChatOpenAI(                # input cache  output
-    model= "gpt-4o-mini",       # $0.15 $0.075 $0.60
-    # model= "gpt-3.5-turbo",   # $0.50 $0.000 $1.50   
+# carrego modelo de linguagem (cache session)
+@st.cache_resource
+def llm_model():
+    return ChatOpenAI(              # input cache  output
+        model= "gpt-4o-mini",       # $0.15 $0.075 $0.60
+        # model= "gpt-3.5-turbo",   # $0.50 $0.000 $1.50   
 )
+
+# carrego o modelo do vetor (cache session)
+@st.cache_resource
+def embedding_model():
+    return OpenAIEmbeddings(   
+        model="text-embedding-3-small",     # $0.02
+        #model="text-embedding-ada-002",     # $0.10
+        #model="text-embedding-3-large",     # $0.13
+)
+
+# carregos os documentos (cache session)
+@st.cache_resource
+def loader_document():
+    loader= GenericLoader(
+            blob_loader=FileSystemBlobLoader(
+                path="./books",
+                glob="*.pdf",
+            ),
+            blob_parser=PyPDFParser(),  
+        )
+    return loader.load()
+
+# carrego modelo de linguagem
+llm= llm_model()
+
+# carrego o modelo do vetor
+embeddings= embedding_model()
+
+# carrego template prompt
+# rag_template= """
+# Você é um analista profissional do mercado financeiro.
+# Seu trabalho é analisar o resultados das empresas por meio dos relatórios disponibilizados
+# pelas empresas e passá-los para o cliente de forma clara e objetiva.
+# Contexto: {context}
+# Pergunta do cliente: {question}
+# """
 
 # carrego template prompt
 rag_template= """
-Você é um analista profissional do mercado financeiro.
-Seu trabalho é analisar o resultados das empresas por meio dos relatórios disponibilizados
-pelas empresas e passá-los para o cliente de forma clara e objetiva.
+Você é um companheiro amigável e compreensível.
+Seu trabalho é ser uma ótima companhia para conversar, entender o problema dos outros e buscar pelos melhores conselhos
+e palavras de conforto.
 Contexto: {context}
 Pergunta do cliente: {question}
 """
-
-# carrego o modelo do vetor
-embeddings= OpenAIEmbeddings(   
-    model="text-embedding-3-small",     # $0.02
-    #model="text-embedding-ada-002",     # $0.10
-    #model="text-embedding-3-large",     # $0.13
-)
 
 # sidebar
 
@@ -55,33 +86,13 @@ with st.sidebar:
         print("\n")    
         print(uploaded_file[0])
         print("\n")          
-        #print(uploaded_file[0].name)
-        #print("\n")              
-        #print(uploaded_file[1].name)
-        #print("\n")
-        
-        # lendo varios arquivos
-        loader = GenericLoader(
-            blob_loader=FileSystemBlobLoader(
-                path="./",
-                glob="*.pdf",
-            ),
-            blob_parser=PyPDFParser(),  
-        )
 
         # carregando os documentos
-        documents= loader.load()
-
-        #embeddings= OpenAIEmbeddings(   
-        #    model="text-embedding-3-small",     # $0.02
-        #    #model="text-embedding-ada-002",     # $0.10
-        #    #model="text-embedding-3-large",     # $0.13
-        #)
+        documents= loader_document()
 
         # vetorizando os documentos
         vectorstore= FAISS.from_documents(documents, embeddings)
-        retriever= vectorstore.as_retriever()
-        
+        retriever= vectorstore.as_retriever()        
 
 # body
 
