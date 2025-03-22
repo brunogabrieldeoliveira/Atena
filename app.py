@@ -38,33 +38,18 @@ def embedding_model():
 def loader_document():
     loader= GenericLoader(
             blob_loader=FileSystemBlobLoader(
-                path="./books",
+                path="./documents",
                 glob="*.pdf",
             ),
             blob_parser=PyPDFParser(),  
         )
     return loader.load()
 
-# carrego modelo de linguagem
-llm= llm_model()
-
-# carrego o modelo do vetor
-embeddings= embedding_model()
-
-# carrego template prompt
-# rag_template= """
-# Você é um analista profissional do mercado financeiro.
-# Seu trabalho é analisar o resultados das empresas por meio dos relatórios disponibilizados
-# pelas empresas e passá-los para o cliente de forma clara e objetiva.
-# Contexto: {context}
-# Pergunta do cliente: {question}
-# """
-
 # carrego template prompt
 rag_template= """
-Você é um companheiro amigável e compreensível.
-Seu trabalho é ser uma ótima companhia para conversar, entender o problema dos outros e buscar pelos melhores conselhos
-e palavras de conforto.
+Você é um analista profissional do mercado financeiro.
+Seu trabalho é analisar o resultados das empresas por meio dos relatórios disponibilizados
+pelas empresas e passá-los para o cliente de forma clara e objetiva.
 Contexto: {context}
 Pergunta do cliente: {question}
 """
@@ -76,19 +61,24 @@ with st.sidebar:
 
     uploaded_file = st.file_uploader(
         "Entre com um documento para análise", 
-        type=("pdf"),
-        accept_multiple_files= True
+        type=("pdf")
+        # accept_multiple_files= False
     )
-    # obtendo o contexto
-    if len(uploaded_file) > 0:
 
-        print("msn-1")
-        print("\n")    
-        print(uploaded_file[0])
-        print("\n")          
+    # obtendo o contexto
+    if uploaded_file is not None:       
+
+        loader = GenericLoader.from_filesystem(
+            path= uploaded_file.name,
+            parser=PyPDFParser()
+        )
 
         # carregando os documentos
-        documents= loader_document()
+        # documents= loader_document()
+        documents= loader.load()
+
+        # carrego o modelo do vetor
+        embeddings= embedding_model()
 
         # vetorizando os documentos
         vectorstore= FAISS.from_documents(documents, embeddings)
@@ -110,7 +100,11 @@ question = st.text_input(
     disabled=not uploaded_file
 )
 
-if (len(uploaded_file) > 0) and question != "":
+#if (len(uploaded_file) > 0) and question != "":
+if (uploaded_file is not None) and question != "":
+
+    # carrego modelo de linguagem
+    llm= llm_model()
     
     # definindo o prompt
     prompt= ChatPromptTemplate.from_template(rag_template)
@@ -126,6 +120,3 @@ if (len(uploaded_file) > 0) and question != "":
     msg = response.content
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
-
-
-
