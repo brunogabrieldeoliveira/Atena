@@ -88,7 +88,7 @@ with st.sidebar:
 
 # titulo
 st.title("📜 Atena") 
-st.caption("🚀 Chatbot para análise documentos!")
+st.caption("🚀 Agente de IA para análise de investimentos!")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
