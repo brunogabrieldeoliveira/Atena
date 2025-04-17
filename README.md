@@ -75,8 +75,8 @@ A aplicação será iniciada e um link será gerado no terminal para acesso via 
 
 🧪 Exemplo de Uso
 
-### 1. Anexe relatórios em formato pdf para o seu agente analisar.
-### 2. Pergunte sobre os indicadores operacionais da empresa em análise!
+* 1. Anexe relatórios em formato pdf para o seu agente analisar.
+* 2. Pergunte sobre os indicadores operacionais da empresa em análise!
 
 O agente irá responder com base nos dados disponíveis e capacidades da OpenAI.
 
