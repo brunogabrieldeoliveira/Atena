@@ -28,7 +28,7 @@ Este projeto é um **Agente Inteligente** desenvolvido com **LangChain** e **Str
 - Python 3.8+
 - Git
 - Conta na OpenAI com chave de API ativa
-
+- VsCode
 ---
 
 ## 🛠️ Instalação
@@ -54,6 +54,7 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
+---
 
 🔐 Configuração da API Key
 Para garantir a segurança da sua chave da API, usamos um arquivo .env que não está incluído no repositório.
@@ -67,6 +68,7 @@ type nul > .env  # Windows
 
 OPENAI_API_KEY=sua-chave-aqui
 
+---
 
 ▶️ Executando o Projeto
 Após configurar tudo corretamente, execute:
@@ -74,6 +76,7 @@ Após configurar tudo corretamente, execute:
 streamlit run app.py
 A aplicação será iniciada e um link será gerado no terminal para acesso via navegador.
 
+---
 
 🧪 Exemplo de Uso
 
@@ -82,12 +85,14 @@ A aplicação será iniciada e um link será gerado no terminal para acesso via 
 
 O agente irá responder com base nos dados disponíveis e capacidades da OpenAI.
 
+---
 
 📌 Observações
 O projeto está em fase de desenvolvimento contínuo. Contribuições são bem-vindas!
 
 Lembre-se de NÃO versionar o .env nem compartilhar sua chave da OpenAI.
 
+---
 
 ⭐ Gostou do projeto?
 Deixe uma estrela no repositório para apoiar o desenvolvimento! 🌟
