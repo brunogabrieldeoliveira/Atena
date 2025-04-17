@@ -67,23 +67,27 @@ type nul > .env  # Windows
 
 OPENAI_API_KEY=sua-chave-aqui
 
+
 ▶️ Executando o Projeto
 Após configurar tudo corretamente, execute:
 
 streamlit run app.py
 A aplicação será iniciada e um link será gerado no terminal para acesso via navegador.
 
+
 🧪 Exemplo de Uso
 
-* 1. Anexe relatórios em formato pdf para o seu agente analisar.
-* 2. Pergunte sobre os indicadores operacionais da empresa em análise!
+* Anexe relatórios em formato pdf para o seu agente analisar.
+* Pergunte sobre os indicadores operacionais da empresa em análise!
 
 O agente irá responder com base nos dados disponíveis e capacidades da OpenAI.
+
 
 📌 Observações
 O projeto está em fase de desenvolvimento contínuo. Contribuições são bem-vindas!
 
 Lembre-se de NÃO versionar o .env nem compartilhar sua chave da OpenAI.
+
 
 ⭐ Gostou do projeto?
 Deixe uma estrela no repositório para apoiar o desenvolvimento! 🌟
